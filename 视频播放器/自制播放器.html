@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>自制播放器</title>
+</head>
+<style>
+img{vertical-align: middle;}
+.clearfix:after{content: "020";display: block;height: 0; clear: both; visibility: hidden; }
+.clearfix {zoom: 1;}
+.left{float: left;margin-left:30px}
+.right{float: right;margin-right: 30px;}
+.wh{width: 960px;height: 40px;}
+#top{width: 960px;border-radius: 480px;position: relative;height: 10px;background:#252525; }
+#round,#span1{width: 10px;border-radius: 60%;position: absolute;height: 10px;left: 0;top: 0;background: #606060;}
+#span1{left: 40px;}
+.buttom{width: 960px;height: 30px;background: #ccc}
+.buttom .right p{display: inline-block;width: 50px;height: 10px;border-radius: 25px;background: #a8a8a8;position: relative;margin: 0 20px;}
+</style>
+<body>
+  <video id="v1">
+      <source src="ljj-bczdqr.mp4"/>
+      <source src="ljj-bczdqr.ogv"/> 
+  </video>
+  <div class="wh">
+        <div id="top">
+            <div id="round"></div>
+        </div>
+        <div class="buttom clearfix">
+              <div class="left">
+                    <img src="play.png" alt=""  style="margin-right:30px" id="img1">
+                    <span id="now">00:00:00</span>/
+                    <span id="all">00:00:00</span>
+              </div>
+              <div class="right">
+                    <img src="mute.png" alt="" id="mute">
+                    <!-- <p id="p1"><span id="span1"></span></p> -->
+                    <img src="fullscreen.png" alt="" id="full">
+              </div>
+        </div>
+  </div>
+
+
+  <script>
+
+window.onload=function  () {
+       var oV = document.getElementById('v1');
+       var img1=document.getElementById('img1');//播放暂停
+       var mute=document.getElementById('mute');//静音事件
+       var top = document.getElementById('top');
+       var round = document.getElementById('round');
+       var p1 = document.getElementById('p1');
+       var span1 = document.getElementById('span1');
+
+       var disX = 0;   //拖拽的距离设置为0
+       var disX2 = 0;
+       
+       var timer = null;   //设置timer为空来进行定时器的获取时间
+
+      img1.onclick=function(){   //播放暂停事件
+            if( oV.paused){
+                  oV.play();
+                  this.src='paused.png';              
+                  //点击播放后应该开启定时器，暂停后清除定时器
+                  nowTime();   
+                  timer = setInterval(nowTime,1000)  
+                   //设置每1s的播放时间
+            }else{
+                  oV.pause();
+                  this.src='play.png';
+                  clearInterval(timer);
+            }
+       }
+    //静音事件
+      mute.onclick=function(){   
+            // alert(oV.muted)
+            if(oV.muted){      //当静音时
+                  oV.volume=1;  //声音为1
+                  this.src='mute.png';//静音
+                  oV.muted = false;
+            }else{
+                  oV.volume=0;
+                  this.src='muted.png';//取消静音
+                  oV.muted = true;
+            }
+      }     
+
+     document.getElementById('now').innerHTML=changeTime(oV.duration);//duration为视频总时间，作为参数传入
+      //因为获取的时间是总秒数，所以要对时间进行操作，故定义了一个changeTime函数。
+      function changeTime(iNum){ //iNum接收到总时间
+            // alert(iNum);
+            iNum = parseInt( iNum );
+            var iH = toZero(Math.floor(iNum/3600));
+            var iM = toZero(Math.floor(iNum%3600/60));
+            // alert(iNum%3600)
+            var iS = toZero(Math.floor(iNum%60));
+            return iH + ':' +iM + ':' + iS;  
+            //拼接时间        
+      }
+        
+        //补零的方法  
+      function toZero(num){  //传个数过来对它进行判断
+            if(num<=9){
+              return '0' + num;
+            }
+            else{
+              return '' + num;
+            }
+      }
+      //当前播放时间
+      function nowTime(){   
+            document.getElementById('all').innerHTML= changeTime(oV.currentTime);//同样调用changeTime来进行当前时间的获取。
+            var scale = oV.currentTime/oV.duration;       //当前时间/总时间获取的值就是一个当前播放的比例
+            round.style.left = scale * 950 + 'px';
+            //所能走的距离（960-10）*播放比例，就是向左的偏移量。
+         }
+
+         //全屏方法
+      document.getElementById('full').onclick = function(){
+           if (oV.RequestFullScreen) {
+                  oV.RequestFullScreen();
+            } else if (oV.mozRequestFullScreen) {
+                oV.mozRequestFullScreen();
+            } else if (oV.webkitRequestFullScreen) {
+                oV.webkitRequestFullScreen();
+            }
+       };
+    
+      round.onmousedown = function(ev){
+            var ev = ev || window.event;//存X轴的距离
+            disX = ev.clientX - round.offsetLeft;//拖拽的距离    
+            document.onmousemove = function(ev){
+                  var ev = ev || window.event;
+                  console.log(ev.clientX)
+                  console.log(disX)
+                  round.style.left = L + 'px';
+                  var L = ev.clientX - disX;  
+
+                  if(L<0){
+                       L = 0;
+                  }
+                  else if(L>top.offsetWidth - round.offsetWidth){
+                       L = top.offsetWidth - round.offsetWidth;
+                  }              
+                                           
+                  var scale = L/(top.offsetWidth - round.offsetWidth);              
+                  oV.currentTime = scale * oV.duration;   //得到拖拽后的当前时间
+                  nowTime();    //让当前时间更新
+            };
+            document.onmouseup = function(){//鼠标放开之后清空
+                document.onmousemove = null;
+            };
+            return false;
+       };
+       //方法同上
+       span1.onmousedown = function(ev){
+            var ev = ev || window.event;
+            disX2 = ev.clientX - span1.offsetLeft;
+            document.onmousemove = function(ev){
+                  var ev = ev || window.event;            
+                  var L = ev.clientX - disX2;            
+                  if(L<0){
+                      L = 0;
+                  }
+                  else if(L>p1.offsetWidth - span1.offsetWidth){
+                      L = p1.offsetWidth - span1.offsetWidth;
+                  }              
+                  span1.style.left = L + 'px';              
+                  var scale = L/(p1.offsetWidth - span1.offsetWidth);
+                  oV.volume = scale;             
+            };
+            document.onmouseup = function(){
+                  document.onmousemove = null;
+            };
+            return false;
+       };
+}
+
+  </script>
+</body>
+</html>
