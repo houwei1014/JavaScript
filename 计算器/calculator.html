@@ -1,92 +1,563 @@
-<!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
-  <title>计算器</title>
-  <link rel="manifest" href="manifest.json">
-  <link href="lib/ionic/css/ionic.css" rel="stylesheet">
-  <link href="css/style.css" rel="stylesheet">
-  <script src="lib/ionic/js/ionic.bundle.js"></script>
-  <script src="js/app.js"></script>
-  <style>
-    .btn {
-      padding: 0;
-    }
-    .btn div {
-      height: 100px;
-      line-height: 100px;
-      background: #C5C6C8;
-      font-size: 200%;
-      border-top:1px solid #ddd;
-      border-right:1px solid #ddd;
-    }
-    .btn .math {
-      background: #E6850C;
-      color: #fff;
-    }
-    .disc {
-      padding: 0;
-    }
-    .disc>div:nth-child(1) {
-      height: 80px;
-      line-height: 80px;
-      background: #000;
-      color: #fff;
-      font-size: 250%;
-    }
-    .disc>div:nth-child(2) {
-      height: 100px;
-      line-height: 90px;
-      background: #000;
-      color: #fff;
-      font-size: 500%;
-      font-weight: lighter;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>计算器</title>
+    <link href="style.css" rel="stylesheet" type="text/css"/>
+    <script src="script.js"></script>
+    <style>
+        body {
+
+            font-size:24px;
+            font-family:Arial, Georgia, "Times New Roman", Times, serif;
+            color:#555;
+            text-align:center;
+            background-color:#555;
+        }
+        body div{
+            align:center;
+            margin-top:5px;
+        }
+        #calculator{
+            align:center;
+            width:350px;
+            height:550px;
+            margin:10px auto;
+            border:#fff 2px solid;
+            overflow:hidden;
+            background-color:#f2f2f2;
+            border-radius: 10px;
+        }
+
+        .rescult{
+            align:center;
+            padding:10px 5px 0px 5px;
+        }
+        #result,#result0{
+            width:300px;
+            height:40px;
+            font-size:35px;
+            text-align:right;
+            direction:ltr;
+            border:#C0C0C0;
+            overflow:hidden;
+            background-color:#C0C0C0;
+            word-wrap : normal;
+            resize: none;
+        }
+        #result0{
+            font-size:25px;
+        }
+        section {
+            float: left;
+            width:100px;
+            padding: 0px 200px 10px 20px;
+            height: 50px;
+        }
+
+        .checkbox {
+            position: relative;
+            display: inline-block;
+        }
+
+        .checkbox label {
+            font-size:20px;
+            text-align: center;
+            padding-top: 5px;
+            width: 90px;
+            height: 30px;
+            position: relative;
+            display: inline-block;
+            border-radius: 46px;
+            -webkit-transition: 0.4s;
+            transition: 0.4s;
+        }
+        .checkbox label:after {
+            content: '';
+            position: absolute;
+            padding-top: 20px;
+            width: 45px;
+            height: 20px;
+            border-radius: 40%;
+            left: 0;
+            top: -5px;
+            z-index: 2;
+            background: #f2f2f2;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            -webkit-transition: 0.4s;
+            transition: 0.4s;
+        }
+        .checkbox input {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .checkbox input:hover + label:after {
+            box-shadow: 0 2px 15px 0 rgba(0, 0, 0, 0.2), 0 3px 8px 0 rgba(0, 0, 0, 0.2);
+        }
+        .checkbox input:checked + label:after {
+            left: 45px;
+        [css] view plain copy
+        }
+        .model-1 .checkbox input:checked + label {
+            background:#ccc ;
+        }
+        .model-1 .checkbox input:checked + label:after {
+            background:#f2f2f2;
+        }
+
+        #rows{
+
+            align:center;
+            padding:0 3px;
+
+        }
+        #below{
+            margin-top:0px;
+            margin-left:25px;
+            margin-bottom: 30px;
+            width:300px;
+        }
+        #left{
+            margin-top:0px;
+            float:left;
+        }
+        #right{
+            margin-top:10px;
+            float:right;
+        }
+        .row1,.row2,.row3,#below{
+            align:center;
+        }
+        .row3{
+            margin-bottom: 0px;
+        }
+        button {
+            outline: none;
+        }
+        #bt1,#bt2,#bt3,#bt4,#bt5,#bt6,#bt7,#bt8,#bt9,#bt10,#bt11,#bt12,#bt13,#bt14,#bt15,#bt16,#bt17,#bt18{
+            font-size:18px;
+            width:70px;
+            height:70px;
+            background-color:#eaeaea;
+            cursor:pointer;
+        }
+        #bt16{
+            width:145px;
+        }
+        #bt18{
+            height:140px;
+        }
+        #sci{
+            display:none;
+        }
+        #sci button{
+            font-size:18px;
+            width:55px;
+            height:55px;
+            background-color:#eaeaea;
+            cursor:pointer;
+
+        }
+        #record{
+            float:right;
+            font-size:15px;
+            color:#555;
+        }
+        #record:hover{
+            color:red;
+        }
+
+    </style>
 </head>
-<body ng-app="starter" ng-controller="ctrl">
-<ion-header-bar class="bar-dark">
-  <button class="button ion ion-calculator button-dark"></button>
-  <h1 class="title">计算器</h1>
-</ion-header-bar>
-<ion-content>
-  <div class="row-center disc">
-    <div class="col">{{ x }}</div>
-    <div class="col text-right">123</div>
-  </div>
-  <div class="row btn">
-    <div class="col-25 text-center">AC</div>
-    <div class="col-25 text-center">+/-</div>
-    <div class="col-25 text-center">C</div>
-    <div class="col-25 text-center math">/</div>
-  </div>
-  <div class="row btn">
-    <div class="col-25 text-center" data="7">7</div>
-    <div class="col-25 text-center" data="8">8</div>
-    <div class="col-25 text-center" data="9">9</div>
-    <div class="col-25 text-center math">*</div>
-  </div>
-  <div class="row btn">
-    <div class="col-25 text-center" data="4">4</div>
-    <div class="col-25 text-center" data="5">5</div>
-    <div class="col-25 text-center" data="6">6</div>
-    <div class="col-25 text-center math">-</div>
-  </div>
-  <div class="row btn">
-    <div class="col-25 text-center" data="1" ng-click="num($index)">1</div>
-    <div class="col-25 text-center" data="2" ng-click="num($index)">2</div>
-    <div class="col-25 text-center" data="3" ng-click="num($index)">3</div>
-    <div class="col-25 text-center math">+</div>
-  </div>
-  <div class="row btn">
-    <div class="col-50 text-center" data="0" ng-click="num($index)">0</div>
-    <div class="col-25 text-center">.</div>
-    <div class="col-25 text-center math">=</div>
-  </div>
-</ion-content>
-<ion-footer-bar class="dark-bg">
-  <h1 class="title light">版权所有&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;严禁必究</h1>
-</ion-footer-bar>
+
+<body>
+
+<div id="calculator">
+    <div class="rescult">
+        <textarea type="text" id="result0" onfocus="this.blur();"></textarea>
+        <textarea type="text" id="result" onfocus="this.blur();"></textarea>
+    </div>
+    <div>
+        <section class="model-1">           <!--包含按钮的一个长形区域-->
+            <div class="checkbox"  onclick="styleChange()">
+                <!--包含按钮的一个较小长形区域-->
+                <input type="checkbox"/>
+                <label>科学标准</label>                 <!--按钮底部的灰色滑动区-->
+            </div>
+        </section>
+    </div>
+
+    <!--标准计算器布局-->
+    <div id="rows" style="display:inline;">
+        <div class="row1">
+            <button id="bt1" onclick="zero()">C</button>
+            <button id="bt2" onclick="back()">DEL</button>
+            <button id="bt3" onclick="divide()">÷</button>
+            <button id="bt4" onclick="times()">×</button>
+        </div>
+        <div class="row2">
+            <button id="bt5" onclick="num(7)">7</button>
+            <button id="bt6" onclick="num(8)">8</button>
+            <button id="bt7" onclick="num(9)">9</button>
+            <button id="bt8" onclick="plus()">+</button>
+        </div>
+        <div class="row3">
+            <button id="bt9" onclick="num(4)">4</button>
+            <button id="bt10" onclick="num(5)">5</button>
+            <button id="bt11" onclick="num(6)">6</button>
+            <button id="bt12" onclick="minus()">-</button>
+        </div>
+
+        <div id="below">
+            <div id="left">
+                <div class="row4">
+                    <button id="bt13" onclick="num(1)">1</button>
+                    <button id="bt14" onclick="num(2)">2</button>
+                    <button id="bt15" onclick="num(3)">3</button>
+                </div>
+                <div class="row5">
+                    <button id="bt16" onclick="num(0)">0</button>
+                    <button id="bt17" onclick="dot()">.</button>
+                </div>
+            </div>
+            <div id="right">
+                <button id="bt18" onclick="equal()">=</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!--科学计算器布局-->
+    <div id="sci"  style="display:none;">
+        <div class="sci1">
+            <button id="bt21" onclick="zero()">C</button>
+            <button id="bt22" onclick="back()">DEL</button>
+            <button id="bt23" onclick="pow1()">^</button>
+            <button id="bt24" onclick="num('π')">π</button>
+            <button id="bt25" onclick="pow2()">√</button>
+        </div>
+        <div class="sci2">
+            <button id="bt26" onclick="sin()">sin</button>
+            <button id="bt27" onclick="num('(')">(</button>
+            <button id="bt28" onclick="num(')')">)</button>
+            <button id="bt29" onclick="divide1()">1/X</button>
+            <button id="bt30" onclick="divide()">÷</button>
+        </div>
+        <div class="sci3">
+            <button id="bt31" onclick="cos()">cos</button>
+            <button id="bt32" onclick="num(7)">7</button>
+            <button id="bt33" onclick="num(8)">8</button>
+            <button id="bt34" onclick="num(9)">9</button>
+            <button id="bt35" onclick="times()">×</button>
+        </div>
+        <div class="sci4">
+            <button id="bt36" onclick="tan()">tan</button>
+            <button id="bt37" onclick="num(4)">4</button>
+            <button id="bt38" onclick="num(5)">5</button>
+            <button id="bt39" onclick="num(6)">6</button>
+            <button id="bt40" onclick="minus()">-</button>
+        </div>
+        <div class="sci5">
+            <button id="bt41" onclick="ln()">ln</button>
+            <button id="bt42" onclick="num(1)">1</button>
+            <button id="bt43" onclick="num(2)">2</button>
+            <button id="bt44" onclick="num(3)">3</button>
+            <button id="bt45" onclick="plus()">+</button>
+        </div>
+        <div class="sci6">
+            <button id="bt46" onclick="log()">log</button>
+            <button id="bt47" onclick="num(0)">0</button>
+            <button id="bt48" onclick="dot()">.</button>
+            <button id="bt49" onclick="quyu()">%</button>
+            <button id="bt50" onclick="equal()">=</button>
+        </div>
+
+    </div>
+
+</div>
+<script>
+    //改进： 定义一个变量记录“=”的输入与否而不必每输入数字时都要检索一遍文本框内容
+
+
+    var status=0;   //标记所输入的是数字还是运算符号
+    var calcu=0;    //标记所要执行的方法是哪一个
+
+
+    /*数字、括号及PI的输入*/
+    function num(x){
+        var str0=document.getElementById('result0').value;
+        var str=document.getElementById('result').value;
+        if(str0.indexOf("=")>0){
+            document.getElementById('result0').value='';
+            document.getElementById('result').value='0';
+            str=document.getElementById('result').value;
+        }
+        if(str=="0")
+            str='';
+        str+=String(x);
+        document.getElementById('result').value=str;
+        status=0;
+    }
+    //输入. （未做是否包含“.”的判断）
+    function dot(){
+        var str0=document.getElementById('result0').value;
+        var str=document.getElementById('result').value;
+        if(str0.indexOf("=")>0){
+            document.getElementById('result0').value='';
+            document.getElementById('result').value='0';
+            str=document.getElementById('result').value;
+        }
+        str=str+'.';
+        document.getElementById('result').value=str;
+    }
+
+
+    /*三角函数以及'1/'计算*/
+    function sin(){
+        calcu=1;
+        cal();
+    }
+    function cos(){
+        calcu=2;
+        cal();
+    }
+    function tan(){
+        calcu=3;
+        cal();
+    }
+    function divide1(){
+        calcu=4;
+        cal();
+    }
+    function ln(){
+        calcu=5;
+        cal();
+    }
+    function log(){
+        calcu=6;
+        cal();
+    }
+    function cal(){
+        var str0=document.getElementById('result0').value;
+        var str=document.getElementById('result').value;
+        if(str0.indexOf("=")>0){
+            document.getElementById('result0').value='';
+            document.getElementById('result').value='0';
+            str=document.getElementById('result').value;
+        }
+        if(str=="0")
+            str='';
+        switch(calcu){
+            case 1: str+=String("sin(");break;
+            case 2: str+=String("cos(");break;
+            case 3: str+=String("tan(");break;
+            case 4: str+=String("1/");break;
+            case 5: str+=String("ln(");break;
+            case 6: str+=String("log(");break;
+        }
+        document.getElementById('result').value=str;
+        status=1;
+    }
+
+
+    /*   ^、√以及%的输入   */
+    function pow1(){
+        calcu=1;
+        powS();
+    }
+    function pow2(){
+        calcu=2;
+        powS();
+    }
+    function quyu(){
+        calcu=3;
+        powS();
+    }
+    function powS(){
+        if(status == 1)
+            return;
+        var strpow0=document.getElementById('result0').value;
+        var strpow=document.getElementById('result').value;
+        if(strpow0.indexOf("=")>0){
+            document.getElementById('result0').value='';
+            /*document.getElementById('result').value='0';*/
+            strpow=document.getElementById('result').value;
+        }
+        switch(calcu){
+            case 1: strpow+=String('^');
+                break;
+            case 2: if(strpow=='0')
+                strpow="√";
+            else{
+                strpow+=String('√');
+            }
+                break;
+            case 3: strpow+=String("%");
+                break;
+        }
+        document.getElementById('result').value=strpow;
+        status=1;
+    }
+
+
+
+
+    /*   +-×÷ 运算   */
+    function plus(){
+        calcu=1;
+        calculate();
+    }
+    function times(){
+        calcu=2;
+        calculate();
+    }
+    function divide(){
+        calcu=3;
+        calculate();
+    }
+    function calculate(){
+        if(status==1)
+            return;
+        var str0=document.getElementById('result0').value;
+        var str=document.getElementById('result').value;
+        if(str0.indexOf("=")>0 ){
+            document.getElementById('result0').value='';
+            /*document.getElementById('result').value='0';*/
+            str=document.getElementById('result').value;
+        }
+        if(str=='')
+            str='0';
+        switch(calcu){
+            case 1: str+='+';break;
+            case 2: str+='×';break;
+            case 3: str+='÷';break;
+        }
+        document.getElementById('result').value=str;
+        status=1;
+    }
+    function minus(){
+        var str0=document.getElementById('result0').value;
+        var str=document.getElementById('result').value;
+        if(str0.indexOf("=")>0){
+            document.getElementById('result0').value='';
+            /*document.getElementById('result').value='-';*/
+            str=document.getElementById('result').value+'-';
+        }
+        else
+            str+='-';
+        document.getElementById('result').value=str;
+    }
+
+
+    //显示屏字符串为空
+    function zero(){
+        document.getElementById('result0').value="";
+        document.getElementById('result').value="0";
+    }
+
+
+    //显示屏字符串减去最后一个字符
+    function back(){
+        var str0=document.getElementById('result0').value;
+        var str=document.getElementById('result').value;
+        if(str0.indexOf("=")>0 || str=='')
+            return;
+        var str1=str.substr(0,(str.length)-1)
+        document.getElementById('result').value=str1;
+    }
+
+
+    //获取当前显示屏字符，判断所包含运算符，并做相关运算。
+    function equal(){
+        var str0=document.getElementById('result').value;
+        if(str0=="")
+            return;
+        var str=str0.replace(/×/g,'*');     //用正则表达式进行全部替换
+        str=str.replace(/÷/g,'/');
+        str=str.replace(/π/g,'Math.PI');
+        if(str.indexOf("sin")>=0){
+            str=str.replace(/sin/g,'Math.round(Math.sin');
+            str+='*1000000)/1000000';
+
+
+            document.getElementById('result0').value=str0.concat("=");
+            document.getElementById('result').value=eval(str);
+
+        }
+        else if(str.indexOf("cos")>=0){
+            str=str.replace(/cos/g,'Math.round(Math.cos');
+            str+='*1000000)/1000000';
+            document.getElementById('result0').value=str0.concat("=");
+            document.getElementById('result').value=eval(str);
+        }
+        else if(str.indexOf("tan")>=0){
+            str=str.replace(/tan/g,'Math.round(Math.tan');
+            str+='*1000000)/1000000';
+            document.getElementById('result0').value=str0.concat("=");
+            document.getElementById('result').value=eval(str);
+        }
+        else if(str.indexOf("^")>=0){
+            var pos=str0.indexOf('^');
+            var pow1=str0.substring(0,pos);
+            var pow2=str0.substring(pos+1,str0.length+1);
+            result=Math.pow(pow1, pow2);
+            document.getElementById('result0').value=str0.concat("=");
+            document.getElementById('result').value=eval(result);
+        }
+        else if(str.indexOf("√")>=0){
+            var pos=str0.indexOf('√');
+            var pow1=str0.substring(0,pos);
+            var pow2=str0.substring(pos+1,str0.length+1);
+            if(pow1==''){
+                result=Math.pow(pow2,0.5);
+                document.getElementById('result0').value=str0.concat("=");
+                document.getElementById('result').value=eval(result);
+            }
+            else{
+                result=Math.pow(pow2, 1/pow1);
+                document.getElementById('result0').value=str0.concat("=");
+                document.getElementById('result').value=eval(result);
+            }
+        }
+        else if(str.indexOf("ln")>=0){
+            var str=str0.replace(/ln/g,'Math.round(Math.log');
+            str+='*1000000)/1000000';
+            document.getElementById('result0').value=str0.concat("=");
+            document.getElementById('result').value=eval(str);
+        }
+        else if(str.indexOf("log")>=0){
+            var str=str0.replace(/log/g,'Math.log');
+            str+= '/Math.log(10)';
+            document.getElementById('result0').value=str0.concat("=");
+            document.getElementById('result').value=eval(str);
+        }
+        else{
+            result=(eval(str));
+            document.getElementById('result0').value=str0.concat("=");
+            document.getElementById('result').value=result;
+        }
+        var a=document.getElementById('result').value;
+        if(a=="Infinity")
+            document.getElementById('result').value='∞';
+        else if(a=="-Infinity")
+            document.getElementById('result').value='-∞';
+    }
+    function styleChange(){
+        if(document.getElementById('rows').style.display=='inline'){
+            document.getElementById('rows').style.display='none';
+            document.getElementById('sci').style.display='inline';
+        }
+        else if(document.getElementById('rows').style.display=='none'){
+            document.getElementById('rows').style.display='inline';
+            document.getElementById('sci').style.display='none';
+        }
+    }
+</script>
 </body>
 </html>
