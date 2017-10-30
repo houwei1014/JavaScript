@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="js/angular.js"></script>
+    <title>小球运动 Balls motion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            background: #333;
+        }
+        body {
+            color: #999;
+        }
+        .ball {
+            width: 100px;
+            height: 100px;
+            border: 1px solid rgba(255, 255, 255, .5);
+            background: rgba(255, 220, 0, .5);
+            border-radius: 50%;
+            transition: all .1s;
+            position: fixed;
+        }
+        .box {
+            width: 200px;
+            height: 200px;
+            background: #cd5;
+            position: absolute;
+            top: calc(50% - 100px);
+            left: calc(50% - 100px);
+            z-index: 1000;
+            transition: all 1.2s;
+        }
+    </style>
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+<div class="ball" ng-repeat="row in balls track by $index" ng-style="{
+    left: row.x + 'px',
+    top: row.y + 'px',
+    width: row.d + 'px',
+    height: row.d + 'px',
+    backgroundColor: row.bg,
+    borderRadius: row.br
+}"></div>
+<div class="box" ng-style='{
+    borderRadius: xt +"% "+ (100 - xt) +"% "+
+                xb +"% "+ (100 - xb) +"% / "+
+                yl +"% "+ yr +"% "+ (100 - yr) +"% "+
+                (100 - yl) +"%",
+    transform: "translate("+ tx +"px, "+ ty +"px) rotate("+ d +"deg) scale("+ sx +", "+ sy +")"
+}'></div>
+<h1 id="info">{{ vw +"x"+ vh }}</h1>
+<script>
+    angular.module("myApp", [])
+        .controller("myCtrl", ["$scope", "$window", "$timeout","$interval", function($scope, $window, $timeout, $interval){
+            //angularJS调用windows窗口缩放事件
+            var w = angular.element($window);
+            $scope.vw = w[0].outerWidth;
+            $scope.vh = w[0].outerHeight;
+            w.on("resize", function (){
+                $scope.vw = w[0].outerWidth;
+                $scope.vh = w[0].outerHeight;
+            });
+            $scope.max = 100;
+            $scope.balls = [];
+            //定义随机数函数
+            var rand = function(a, b){
+                return Math.round(Math.random() * Math.abs(b - a) + Math.min(a, b));
+            };
+            //定义小球的样式
+            for(var i = 0; i < $scope.max; i++){
+                $scope.r = rand(5, 20);
+                $scope.balls.push({
+                    d: $scope.r,
+                    x: $scope.vw / 2 - $scope.r / 2,
+                    y: $scope.vh / 2 - $scope.r / 2,
+                    dx: rand(0, 1)? 1 : -1,
+                    dy: rand(0, 1)? 1 : -1,
+                    sx: rand(5, 1000) / 100,
+                    sy: rand(5, 1000) / 100,
+                    bg: "rgba("+rand(80, 200)+","+rand(80, 200)+","+rand(80, 200)+","+(rand(20, 80)/100)+")",
+                    sp: rand(1, 20),
+                    br: rand(0,100)+"%"+rand(0,100)+"%"+rand(0,100)+"%"+rand(0,100)+"%"+"/"+rand(0,100)+"%"+rand(0,100)+"%"+rand(0,100)+"%"+rand(0,100)+"%"
+                });
+            }
+            //小球运动函数
+            function move(){
+                for(var i = 0; i < $scope.max; i++){
+                    if(--$scope.balls[i].sp < 0) {
+                        $scope.balls[i].sp = rand(5, 30);
+                        $scope.balls[i].dx = rand(0, 1)? 1 : -1;
+                        $scope.balls[i].dy = rand(0, 1)? 1 : -1;
+                        $scope.balls[i].sx = rand(5, 1000) / 100;
+                        $scope.balls[i].sy = rand(5, 1000) / 100;
+                    }
+                    if (++$scope.balls[i].d > 50) {
+                        $scope.balls[i].d = rand(5, 20);
+                        $scope.balls[i].bg = "rgba("+ rand(80, 200) +", "+ rand(80, 200) +", "+ rand(80, 200) +", "+ (rand(20, 80)/100) +")";
+                    }
+                    $scope.balls[i].x+=$scope.balls[i].sx * $scope.balls[i].dx;
+                    $scope.balls[i].y+=$scope.balls[i].sy * $scope.balls[i].dy;
+                    if($scope.balls[i].x > $scope.vw - $scope.balls[i].d && $scope.balls[i].dx > 0) {
+                        $scope.balls[i].dx = -$scope.balls[i].dx;
+                    }
+                    if($scope.balls[i].x < 0 && $scope.balls[i].dx < 0) {
+                        $scope.balls[i].dx = -$scope.balls[i].dx;
+                    }
+                    if($scope.balls[i].y > $scope.vh - $scope.balls[i].d && $scope.balls[i].dy > 0) {
+                        $scope.balls[i].dy = -$scope.balls[i].dy;
+                    }
+                    if($scope.balls[i].y < 0 && $scope.balls[i].dy < 0) {
+                        $scope.balls[i].dy = -$scope.balls[i].dy;
+                    }
+                }
+                $timeout(move, 100);
+            }
+            move();
+            //大球运动函数
+            $interval(function(){
+                $scope.xt = rand(20, 80);
+                $scope.xb = rand(20, 80);
+                $scope.yl = rand(20, 80);
+                $scope.yr = rand(20, 80);
+                $scope.d =  rand(-45, 45);
+                $scope.tx = rand(-55, 50);
+                $scope.ty = rand(-55, 50);
+                $scope.sx = rand(8, 12) / 10;
+                $scope.sy = rand(8, 12) / 10;
+            }, 1000);
+        }])
+</script>
+</body>
+</html>
