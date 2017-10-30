@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>火柴人格斗</title>
+    <style>
+        * {
+            font-family: Consolas;
+        }
+        body {
+            margin-top: 0;
+        }
+        #title {
+            width: 461px;
+            height: 50px;
+            line-height: 50px;
+            font-size: 150%;
+            text-align: center;
+        }
+        table {
+            border-collapse: collapse;
+            position: relative;
+        }
+        table tr td {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #808080;
+        }
+        table div.snake {
+            width: 23px;
+            height: 23px;
+            background: url("icon/ns.png");
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        table div.food {
+            width: 23px;
+            height: 23px;
+            position: absolute;
+        }
+        table div.obstacle {
+            width: 23px;
+            height: 23px;
+            position: absolute;
+        }
+        table div.hurt {
+            width: 23px;
+            height: 23px;
+            position: absolute;
+        }
+        table div.help {
+            width: 23px;
+            height: 23px;
+            position: absolute;
+            border-radius: 50%;
+            border: 1px solid red;
+        }
+        img {
+            float: left;
+            display: block;
+            margin: 12px 5px;
+        }
+        h4 {
+            float: left;
+            margin: 12px 15px 12px 0;
+            width: calc(461px / 4);
+            height: 20px;
+            border: 1px solid #ddd;
+        }
+        h4 p{
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            background: green;
+        }
+        .start_btn {
+            float: left;
+            margin: 12px 13px;
+            cursor: pointer;
+            outline: none;
+            background: lightgreen;
+        }
+        .pause_btn {
+            float: left;
+            margin: 12px 13px;
+            cursor: pointer;
+            outline: none;
+            background: yellow;
+        }
+        .score {
+            float: left;
+            margin: 12px 13px;
+        }
+        .score span {
+            font-family: Impact;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="title">火柴人格斗</div>
+    <table>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <img src="icon/leader.png">
+    <h4><p></p></h4>
+    <button class="start_btn">开始游戏</button>
+    <button class ="pause_btn">暂停游戏</button>
+    <div class="score">
+        得分：
+        <span>0</span>
+        分
+    </div>
+</body>
+<script>
+    window.onload = function(){
+        var timer, x = 0, y = 0, score = 0, sword = 100, start = true, pause = true;
+        var startBtn = document.querySelector(".start_btn");
+        var pauseBtn = document.querySelector(".pause_btn");
+        var scores = document.querySelector(".score");
+
+        //点击游戏开始
+        startBtn. onclick = function(){
+            if(start){
+
+                //火柴人产生
+                var table = document.querySelector("table");
+                var snake = document.createElement("div");
+                snake.setAttribute("class", "snake");
+                table.appendChild(snake);
+                start = false;
+
+                //默认火柴人运动
+                timer = setInterval(function (){
+                    x += 23;
+                    //console.log(x);
+                    snake.style.left = x + "px";
+                    eat();
+                    death();
+                    next();
+                }, 500);
+
+                //键盘控制火柴人运动
+                document.onkeydown = function (){
+                    var key = window.event.keyCode;
+                    switch (key){
+                        case 37: //向左键
+                            clearInterval(timer);
+                            timer = setInterval(function (){
+                                x -= 23;
+                                snake.style.left = x  + "px";
+                                eat();
+                                death();
+                                next();
+                            }, 500);
+                            break;
+                        case 38: //向上键
+                            clearInterval(timer);
+                            timer = setInterval(function (){
+                                y -= 23;
+                                snake.style.top= y  + "px";
+                                eat();
+                                death();
+                                next();
+                            }, 500);
+                            break;
+                        case 39: //向右键
+                            clearInterval(timer);
+                            timer = setInterval(function (){
+                                x += 23;
+                                snake.style.left = x  + "px";
+                                eat();
+                                death();
+                                next();
+                            }, 500);
+                            break;
+                        case 40: //向下键
+                            clearInterval(timer);
+                            timer = setInterval(function (){
+                                y += 23;
+                                snake.style.top = y  + "px";
+                                eat();
+                                death();
+                                next();
+                            }, 500);
+                            break;
+                        default:
+                            break;
+                    }
+                };
+
+                //大boss随机落点
+                function bigBoss(){
+                    var table = document.querySelector("table");
+                    var food = document.createElement("div");
+                    food.setAttribute("class", "food");
+                    table.appendChild(food);
+
+                    var coordinate = [0, 23, 46, 69, 92, 115, 138, 161, 184, 207, 230, 253, 276, 299, 322, 345, 368, 391, 414, 437];
+                    var boss = ["cst.png", "lxa.png", "swk.png", "ys.png"];
+                    var koBoss = boss[parseInt(Math.random() * 4)];
+
+                    food.style.top = coordinate[parseInt(Math.random() * 20)] + "px";
+                    food.style.left = coordinate[parseInt(Math.random() * 20)] + "px";
+                    food.style.backgroundImage = "url('icon/" + koBoss + "')";
+
+                    if(document.querySelector(".food").offsetTop === 0
+                        && document.querySelector(".food").offsetLeft === 0){
+                        bigBoss();
+                    }
+
+                }
+                bigBoss();
+
+                //小boss障碍物生成
+                function smallBoss(){
+                    var table = document.querySelector("table");
+                    var coordinate = [0, 23, 46, 69, 92, 115, 138, 161, 184, 207, 230, 253, 276, 299, 322, 345, 368, 391, 414, 437];
+                    var boss = ["death.png", "hurt.png", "help.png"];
+                    var num = 100;
+
+                    //生成骷髅
+                    for(var i = 0; i < parseInt(0.8 * num); i++){
+                        var obstacle = document.createElement("div");
+                        obstacle.setAttribute("class", "obstacle");
+                        table.appendChild(obstacle);
+                        obstacle.style.top = coordinate[parseInt(Math.random() * 20)] + "px";
+                        obstacle.style.left = coordinate[parseInt(Math.random() * 20)] + "px";
+                        obstacle.style.backgroundImage = "url('icon/" + boss[0] + "')";
+
+                        while ((obstacle.offsetTop === 0 && obstacle.offsetLeft === 0)
+                            || (obstacle.offsetTop === document.querySelector(".food").offsetTop && obstacle.offsetLeft === document.querySelector(".food").offsetLeft)){
+                            obstacle.style.top = coordinate[parseInt(Math.random() * 20)] + "px";
+                            obstacle.style.left = coordinate[parseInt(Math.random() * 20)] + "px";
+                            obstacle.style.backgroundImage = "url('icon/" + boss[0] + "')";
+                        }
+                    }
+
+                    //生成长剑
+                    for(var K = 0; K < parseInt(0.2 * num); K++){
+                        var hurt = document.createElement("div");
+                        hurt.setAttribute("class", "hurt");
+                        table.appendChild(hurt);
+                        hurt.style.top = coordinate[parseInt(Math.random() * 20)] + "px";
+                        hurt.style.left = coordinate[parseInt(Math.random() * 20)] + "px";
+                        hurt.style.backgroundImage = "url('icon/" + boss[1] + "')";
+
+                        while ((hurt.offsetTop === 0 && hurt.offsetLeft === 0)
+                        || (hurt.offsetTop === document.querySelector(".food").offsetTop && hurt.offsetLeft === document.querySelector(".food").offsetLeft)){
+                            hurt.style.top = coordinate[parseInt(Math.random() * 20)] + "px";
+                            hurt.style.left = coordinate[parseInt(Math.random() * 20)] + "px";
+                            hurt.style.backgroundImage = "url('icon/" + boss[1] + "')";
+                        }
+                    }
+
+                    //生成宝石
+                    for(var j = 0; j < 5; j++){
+                        var help = document.createElement("div");
+                        help.setAttribute("class", "help");
+                        table.appendChild(help);
+                        help.style.top = coordinate[parseInt(Math.random() * 20)] + "px";
+                        help.style.left = coordinate[parseInt(Math.random() * 20)] + "px";
+                        help.style.backgroundImage = "url('icon/"+ boss[2] +"')";
+
+                        while ((help.offsetTop === 0 && help.offsetLeft === 0)
+                        || (help.offsetTop === document.querySelector(".food").offsetTop && help.offsetLeft === document.querySelector(".food").offsetLeft)){
+                            obstacle.style.top = coordinate[parseInt(Math.random() * 20)] + "px";
+                            obstacle.style.left = coordinate[parseInt(Math.random() * 20)] + "px";
+                            obstacle.style.backgroundImage = "url('icon/"+ boss[2] +"')";
+                        }
+                    }
+                }
+                smallBoss();
+
+                //杀掉boss结果得分
+                function getScore(){
+                    var str = "";
+                    str +=  "得分：&nbsp;" + "<span>"+ score +"</span>" + "&nbsp;分";
+                    scores.innerHTML = str;
+                }
+                getScore();
+
+                //火柴人杀掉boss过程
+                function eat(){
+                    if(document.querySelector(".snake").offsetTop === document.querySelector(".food").offsetTop
+                        && document.querySelector(".snake").offsetLeft === document.querySelector(".food").offsetLeft){
+                        score++;
+                        document.querySelector(".food").parentNode.removeChild(document.querySelector(".food"));
+                        bigBoss();
+                        getScore();
+                    }
+                }
+
+                //检测火柴人血量
+                function death(){
+                    //碰壁死亡
+                    if(document.querySelector(".snake").offsetTop < 0 || document.querySelector(".snake").offsetTop > 437 ||
+                        document.querySelector(".snake").offsetLeft < 0 || document.querySelector(".snake").offsetLeft > 437){
+                        clearInterval(timer);
+                        document.querySelector("p").style.width = 10 + "%";
+                        document.querySelector("p").style.color = "red";
+                        showConfirm();
+                    }
+
+                    //碰到骷髅死亡
+                    var die = document.querySelectorAll(".obstacle");
+                    for(var i = 0; i < die.length; i++){
+                        if(document.querySelector(".snake").offsetTop === die[i].offsetTop &&
+                            document.querySelector(".snake").offsetLeft === die[i].offsetLeft){
+                            clearInterval(timer);
+                            document.querySelector("p").style.width = 10 + "%";
+                            document.querySelector("p").style.background = "red";
+                            showConfirm();
+                            break;
+                        }
+                    }
+
+                    //碰到长剑掉一半血
+                    var hurt = document.querySelectorAll(".hurt");
+                    for(var j = 0; j < hurt.length; j++){
+                        if(document.querySelector(".snake").offsetTop === hurt[j].offsetTop &&
+                            document.querySelector(".snake").offsetLeft === hurt[j].offsetLeft){
+                            sword -= 45;
+                            document.querySelector("p").style.width = sword + "%";
+                            document.querySelector("p").style.background = "red";
+                        }
+                        if(document.querySelector("p").style.width === "10%"){
+                            clearInterval(timer);
+                            document.querySelector("p").style.width = 10 + "%";
+                            document.querySelector("p").style.background = "red";
+                            showConfirm();
+                            break;
+                        }
+                    }
+
+                    //碰到宝石回血
+                    var help = document.querySelectorAll(".help");
+                    for(var k = 0; k < help.length; k++){
+                        if(document.querySelector(".snake").offsetTop === help[k].offsetTop &&
+                            document.querySelector(".snake").offsetLeft === help[k].offsetLeft){
+                            document.querySelector("p").style.width = 100 + "%";
+                            document.querySelector("p").style.background = "green";
+                            help[k].parentNode.removeChild(help[k]);
+                        }
+                    }
+
+                }
+
+                //目标完成进入下一关
+                function next(){
+                    if(score === 20){
+                        alert("第一关完成，再接再厉，第二关目标50分！");
+                        window.location.reload();
+                    }else if(score === 50){
+                        alert("第二关完成，再接再厉，第三关目标100分！");
+                        window.location.reload();
+                    }else if(score === 100){
+                        alert("第三关完成，再接再厉，第四关目标200分！");
+                        window.location.reload();
+                    }else if(score === 200){
+                        alert("第四关完成，再接再厉，第五关目标400分！");
+                        window.location.reload();
+                    }else if(score === 400){
+                        alert("目标达成，请创造属于你的最高记录，祝你好运！");
+                        window.location.reload();
+                    }
+                }
+            }
+
+            //点击游戏暂停
+            pauseBtn.onclick = function (){
+                start = true;
+                if(start){
+                    if(pause){
+                        clearInterval(timer);
+                        pauseBtn.innerHTML = "继续游戏";
+                        pauseBtn.style.background = "lightblue";
+                        pause = false;
+                    }else {
+                        //console.log("ok");
+                        timer = setInterval(function (){
+                            x += 23;
+                            snake.style.left = x + "px";
+                            eat();
+                            death();
+                        }, 400);
+                        pauseBtn.innerHTML = "暂停游戏";
+                        pauseBtn.style.background = "yellow";
+                        pause = true;
+                    }
+                }
+                start =false;
+            };
+
+            //分数提示框
+            function showConfirm(){
+                var info = confirm("Game Over！得分："+ score +"分");
+                if (info === true){
+                    alert("继续加油，再创更高记录！");
+                    window.location.reload();
+                    start = true;
+                } else{
+                   alert("重新开始游戏请手动刷新！");
+                }
+            }
+        };
+
+        //游戏开始温馨提示
+        setTimeout(function (){
+            alert("游戏玩法：" +
+                "1.游戏初始关卡共5关，每一关完成后提示下一关需完成的目标，后续关卡等待你探索。"+
+                "2.玩家操控火柴人英雄击杀一个boss得一分，第一关完成需要得到20分。" +
+                "3.玩家触碰墙壁则游戏立即结束，运动过程中碰到骷髅则游戏立即结束，碰到长剑损失一半血量，吃到宝石恢复一半血量，血量为零则游戏立即结束。" +
+                "温馨提示：" +
+                "长剑有一定概率转化为骷髅，宝石也有一定概率转化为长剑或者骷髅，请勿过度自信！");
+        }, 2000)
+    }
+</script>
+</html>

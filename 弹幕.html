@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>弹幕</title>
+    <style>
+        * {
+            font-family: Consolas;
+        }
+        #dm {
+            margin: 0 auto;
+            width: 500px;
+            height: 300px;
+            border: 1px solid #ddd;
+            background: beige;
+            position: relative;
+            overflow: hidden;
+        }
+        #dm>div {
+            width: 245px;
+            height: 20px;
+            position: absolute;
+            right: -100px;
+        }
+        #text {
+            width: 200px;
+            height: 20px;
+            outline: none;
+        }
+        select {
+            width: 50px;
+            height: 25px;
+            outline: none;
+            cursor: pointer;
+        }
+        button {
+            width: 50px;
+            height: 25px;
+            background: #333;
+            color: #fff;
+            outline: none;
+            border: none;
+            cursor: pointer;
+        }
+        #tj {
+            margin-top: 20px;
+            margin-left: 500px;
+        }
+    </style>
+</head>
+<body>
+<div id="dm">
+    <video controls loop style="width: 500px;height: 300px">
+        <source src="http://www.runoob.com/video/php/PHP-Video-1.mp4" type="video/mp4">
+    </video>
+</div>
+<div id="tj">
+    <input type="text" placeholder="请输入弹幕" id="text">
+    <select>
+        <option value="black">黑色</option>
+        <option value="red">红色</option>
+        <option value="green">绿色</option>
+        <option value="blue">蓝色</option>
+        <option value="yellow">黄色</option>
+    </select>
+    <button onclick="barrage()">提交</button>
+</div>
+<script>
+    function barrage(){
+        var val = document.querySelector("#text").value;
+        var color = document.querySelector("select").value;
+        //console.log(color);
+        if(val.length > 0 && val.length < 16){
+            var dm = document.getElementById("dm");
+            var bar = document.createElement("div");
+            bar.innerHTML = val;
+            dm.appendChild(bar);
+            var ran = Math.round(Math.random() * 240 + 20);
+            bar.style.top = ran + "px";
+            bar.style.color = color;
+            document.querySelector("#text").value = "";
+            var x = -100;
+            var timer = setInterval(function(){
+                x+=20;
+                if(x === 500){
+                    clearInterval(timer);
+                }
+                bar.style.right = x + "px";
+            }, 500);
+        }else{
+            alert("请输入1-15位的弹幕字数")
+        }
+    }
+</script>
+</body>
+</html>

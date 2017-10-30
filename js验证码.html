@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>验证码</title>
+    <script src="jquery-3.2.1.js"></script>
+    <style>
+        #sr {
+            width: 130px;
+            height: 38px;
+            border-radius: 5px;
+            outline: none;
+            border: 1px solid #333;
+            float: left;
+            margin-right: 20px;
+        }
+        #box {
+            float: left;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 130px;
+            height: 40px;
+            position: relative;
+        }
+        #yzm {
+            color: black;
+            text-align: center;
+            width: 130px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 5px;
+        }
+        #toolTip {
+            position: absolute;
+            width: 90px;
+            height: 15px;
+            line-height: 15px;
+            font-size: 50%;
+            border: 1px solid #333;
+            background: beige;
+            top: 30px;
+            left: 80px;
+            display: none;
+        }
+        #error {
+            font-size: 80%;
+            color: red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<input type="text" id="sr" placeholder="验证码，区分大小写">
+<div id="box"></div>
+<span id="error">验证码错误，请重新输入</span>
+<script>
+    var number = [];
+    var num = [
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+        'a', 'b', 'c', 'd', 'e', 'f',
+        'g', 'h', 'i', 'j', 'k', 'l',
+        'm', 'n', 'o', 'p', 'q', 'r',
+        's', 't', 'u', 'v', 'w', 'x',
+        'y', 'z', 'A', 'B', 'C', 'D',
+        'E', 'F', 'G', 'H', 'I', 'J',
+        'K', 'L', 'M', 'N', 'O', 'P',
+        'Q', 'R', 'S', 'T', 'U', 'V',
+        'W', 'X', 'Y', 'Z'
+    ];
+
+    //生成验证码函数
+    function make(){
+        number = [];
+        var color = ["#4390EE", "#CA4040", "#FD8504", "green", "#ddd"];
+        var chooseColor = color[parseInt(Math.random() * 5)];
+        for(var i = 0; i < 4; i++){
+            var a= Math.round(Math.random() * 61);
+            var b = num[a];
+            number.push(b);
+            //console.log(b, a);
+        }
+        $("#box").html("<div id='yzm' onclick='javascript:make()' style='background:" + chooseColor + "'>"+number.join("")+"</div>")
+            .append("<span id='toolTip'>看不清，换一张</span>");
+    }
+    make();
+    //console.log(number);
+
+    $("#box").hover(function(){
+        $("#toolTip").show();
+    }, function(){
+        $("#toolTip").hide();
+    });
+
+    $("#sr").blur(function (){
+        if($(this).val() === number.join("") && $(this).val() !== ""){
+            alert("OK");
+            $("#error").hide();
+        }else {
+            $("#error").show();
+        }
+    });
+</script>
+</body>
+</html>

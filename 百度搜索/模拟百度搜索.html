@@ -1,0 +1,1223 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>百度搜索</title>
+    <link rel="stylesheet" type="text/css" href="EasyUI/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="EasyUI/themes/icon.css">
+    <script src="EasyUI/jquery.min.js"></script>
+    <script type="text/javascript" src="EasyUI/jquery.easyui.min.js"></script>
+    <style>
+        body {
+            position: relative;
+        }
+
+        #mnbd {
+            width: 100px;
+            height: 30px;
+            margin: 5px 0 -5px 0;
+        }
+
+        #baidu {
+            height: 22px;
+            outline: none;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            border-left: 1px solid #ddd;
+            border-right: 0 solid #ddd;
+            padding: 1px 5px;
+            margin: -8px 0 0 10px;
+            vertical-align: middle;
+        }
+
+        #baidu:disabled {
+            background: #fff;
+        }
+
+        #camera {
+            display: inline-block;
+            width: 30px;
+            height: 24px;
+            border-top: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            background: url("https://ss1.bdstatic.com/5eN1bjq8AAUYm2zgoY3K/r/www/cache/static/protocol/https/soutu/img/camera_new_5606e8f.png") no-repeat 7px 5px;
+            margin: -8px 0 0 -5px;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+
+        #bdyx {
+            display: inline-block;
+            width: 65px;
+            height: 20px;
+            color: #fff;
+            font-size: 15px;
+            letter-spacing: 1px;
+            background: #3385ff;
+            outline: none;
+            padding: 3px 5px;
+            cursor: pointer;
+            vertical-align: middle;
+            margin: -8px 0 0 -5px;
+        }
+
+        #bdyx:hover {
+            background: #317ef3;
+        }
+
+        #tip {
+            margin: 0 0 0 114px;
+            padding: 0;
+            list-style-type: none;
+            border: 1px solid #ddd;
+            width: 270px;
+            height: auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #tip li {
+            width: 260px;
+            padding: 2px 5px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        #tip li#spe {
+            color: #7E7BC9;
+            font-weight: bold;
+        }
+
+        #tip li span#del {
+            position: absolute;
+            right: 5px;
+            font-size: 80%;
+            text-decoration: underline;
+            color: #333;
+            top: 3px;
+            cursor: pointer;
+        }
+
+        #tip > span#close {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            font-size: 80%;
+            color: red;
+            cursor: pointer;
+        }
+
+        #cam {
+            margin: 0 0 0 114px;
+            padding: 0;
+            list-style-type: none;
+            border: 1px solid #ddd;
+            width: 270px;
+            height: 150px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #x {
+            position: absolute;
+            bottom: 5px;
+            right: 10px;
+            font-size: 150%;
+            color: #C3C3C3;
+            cursor: pointer;
+        }
+
+        #x:hover {
+            color: #317ef3;
+        }
+
+        #box {
+            position: absolute;
+            width: 158px;
+            height: 43px;
+            border: 1px solid #cacbcc;
+            line-height: 43px;
+            bottom: 20px;
+            left: 50px;
+            color: #333;
+        }
+
+        #box:hover {
+            border-color: #317ef3;
+        }
+
+        #preview {
+            position: absolute;
+            background: #FAFAFA;
+            width: 240px;
+            height: 60px;
+            top: 10px;
+            left: 15px;
+            color: #E8E8E8;
+        }
+
+        #preview > span {
+            display: inline-block;
+            width: 240px;
+            height: 60px;
+            color: #E8E8E8;
+            line-height: 60px;
+            text-align: center;
+        }
+
+        #fileTj {
+            position: absolute;
+            top: 0;
+            opacity: 0;
+            width: 158px;
+            height: 43px;
+            z-index: 100;
+            cursor: pointer;
+        }
+
+        #bd {
+            position: absolute;
+            top: 0;
+            left: 40px;
+            font-size: 80%;
+            font-weight: bold;
+        }
+
+        iframe {
+            margin-top: 15px;
+            border: 1px solid #ddd;
+        }
+
+        #progress-box {
+            width: 150px;
+            height: 10px;
+            background: #ddd;
+            border-radius: 5px;
+            display: none;
+            position: absolute;
+            top: 190px;
+            left: 170px;
+            z-index: 100;
+        }
+
+        #progress-bar {
+            width: 0;
+            height: 10px;
+            background: #C23531;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 50%;
+            font-weight: bold;
+            color: #ddd;
+            line-height: 10px;
+        }
+
+        #set {
+            position: absolute;
+            top: 14px;
+            left: 410px;
+            font-size: 80%;
+            cursor: pointer;
+        }
+
+        #set > span:nth-child(1) {
+            text-decoration: underline;
+        }
+
+        #set > span:nth-child(2) {
+            width: 0;
+            height: 0;
+            border-top: 5px solid #898A8A;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            position: absolute;
+            top: 8px;
+            left: 30px;
+        }
+
+        #list {
+            list-style-type: none;
+            border: 1px solid #ddd;
+            padding: 0;
+            margin: 5px 0 0 -22px;
+            background: #fff;
+            box-shadow: 2px 2px 5px #ddd;
+            border-radius: 2px;
+            font-weight: normal;
+            display: none;
+        }
+
+        #list li {
+            width: 80px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+        }
+
+        #list li:hover {
+            background: #3385FF;
+            color: #fff;
+        }
+
+        #login {
+            position: absolute;
+            top: 14px;
+            left: 475px;
+            font-size: 80%;
+            cursor: pointer;
+        }
+
+        #login > span {
+            text-decoration: underline;
+        }
+
+        #login > ul {
+            list-style-type: none;
+            border: 1px solid #ddd;
+            padding: 0;
+            margin: 5px 0 0 -30px;
+            background: #fff;
+            box-shadow: 2px 2px 5px #ddd;
+            border-radius: 2px;
+            font-weight: normal;
+            display: none;
+        }
+
+        #login > ul li {
+            width: 80px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+        }
+
+        #login > ul li:hover {
+            background: #3385FF;
+            color: #fff;
+        }
+
+        #topDown {
+            position: absolute;
+            z-index: 100;
+            width: 505px;
+            height: 355px;
+            background: #FAFAFA;
+            display: none;
+        }
+
+        #head {
+            width: 90%;
+            height: 50px;
+            border-bottom: 1px solid #E6E6E6;
+            margin-left: 20px;
+            position: relative;
+        }
+
+        #head > ul {
+            padding: 0;
+            margin: 0;
+            list-style-type: none;
+        }
+
+        #head > ul li {
+            float: left;
+            margin: 15px 10px;
+            color: #666666;
+            cursor: pointer;
+            padding-bottom: 13px;
+        }
+
+        #head > span#xclose {
+            position: absolute;
+            top: 5px;
+            right: 8px;
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            font-size: 200%;
+            color: #C8C8C8;
+            cursor: pointer;
+        }
+
+        #head > ul li.switch {
+            color: black;
+            font-weight: bold;
+            border-bottom: 2px solid #2C85FF;
+        }
+
+        #body {
+            width: 90%;
+            height: 300px;
+            margin-left: 20px;
+        }
+
+        #topBody {
+            width: 100%;
+            height: 250px;
+        }
+
+        #topBody table {
+            font-size: 80%;
+        }
+
+        #topBody table tr {
+            display: table;
+            margin: 15px 0;
+        }
+
+        #topBody table tr td:nth-child(1) {
+            width: 68%;
+        }
+
+        #topBody table tr td:nth-child(1) span {
+            font-weight: bold;
+        }
+
+        #topBody table tr td:nth-child(2) {
+            width: 32%;
+        }
+
+        #downBody {
+            width: 100%;
+            height: 250px;
+            display: none;
+        }
+
+        #footer {
+            margin: 80px -10px;
+        }
+
+        #footer > button {
+            border: 1px solid #ddd;
+            outline: none;
+            width: 90px;
+            height: 28px;
+            cursor: pointer;
+        }
+
+        #footer > button:nth-child(1) {
+            color: #fff;
+            background: #3388FF;
+            margin: 13px 0 13px 140px;
+        }
+
+        #footer > button:nth-child(1):hover {
+            background: #3180f7;
+        }
+
+        #footer > button:nth-child(2) {
+            color: #666;
+            background: #EBEBEB;
+            margin: 13px 0 13px 10px;
+        }
+
+        #footer > button:nth-child(2):hover {
+            background: #e6e6e6;
+        }
+
+        #downBody > div {
+            width: 100%;
+            height: 225px;
+            overflow-y: scroll;
+        }
+
+        #downBody table {
+            border: 1px solid #ddd;
+        }
+
+        #downBody table tr {
+            margin: 0;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+
+        #downBody table tr td {
+            border: 1px solid #ddd;
+            background-color: #fff;
+            font-size: 80%;
+        }
+
+        #downBody table tr td:nth-child(1) {
+            width: 35%;
+            text-align: center;
+        }
+
+        #downBody table tr td:nth-child(2) {
+            width: 65%;
+            text-align: center;
+        }
+
+        #downBody > button {
+            border: 1px solid #ddd;
+            outline: none;
+            width: 90px;
+            height: 28px;
+            cursor: pointer;
+            color: #fff;
+            background: #3388FF;
+            margin: 18px 0 13px 180px;
+        }
+
+        #downBody > button:hover {
+            background: #3180f7;
+        }
+
+        .panel-title {
+            text-align: center;
+        }
+
+        .panel-with-icon {
+            background: url("https://passport.baidu.com/passApi/img/baidu_logo_24.png") no-repeat 160px;
+            background-size: 14px;
+        }
+
+        #y > span {
+            width: 100px !important;
+        }
+
+        #boxs {
+            border-radius: 5px;
+            width: 50px;
+            height: 23px;
+            vertical-align: top;
+            display: inline-block;
+            position: relative;
+        }
+
+        #yzm {
+            color: black;
+            text-align: center;
+            width: 50px;
+            height: 23px;
+            line-height: 23px;
+            border-radius: 5px;
+        }
+
+        #toolTip {
+            position: absolute;
+            width: 70px;
+            height: 15px;
+            line-height: 15px;
+            font-size: 50%;
+            border: 1px solid #333;
+            background: beige;
+            top: 15px;
+            left: 40px;
+            display: none;
+        }
+
+        .dialog-toolbar, .dialog-button {
+            background: #fff;
+        }
+
+        .dialog-button {
+            border-top-color: #fff;
+        }
+
+        .messager-body > div:nth-child(2) {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 110%;
+        }
+
+        .panel {
+            position: absolute !important;
+        }
+    </style>
+</head>
+<body onclick="$('#tip').css('border', 'none').find('li').hide();">
+<div id="topDown">
+    <div id="head">
+        <ul>
+            <li class="switch" name="a">搜索设置</li>
+            <li name="b">搜索记录</li>
+        </ul>
+        <span id="xclose">&times;</span>
+    </div>
+    <div id="body">
+        <div id="topBody">
+            <table width="100%" border="0" cellpadding="2" cellspacing="0">
+                <tr>
+                    <td><span style="margin-left: 12px">搜索框提示</span>：是否希望在搜索时显示搜索框提示</td>
+                    <td style="padding-left: 19px">
+                        <input type="radio" name="t" id="t1" checked>
+                        <label for="t1">显示</label>
+                        <input type="radio" name="t" id="t2">
+                        <label for="t2">不显示</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span>搜索语言范围</span>：设定您所要搜索的网页内容的语言</td>
+                    <td style="padding-left: 10px">
+                        <input type="radio" name="l" id="l1" checked>
+                        <label for="l1">简体中文</label>
+                        <input type="radio" name="l" id="l2">
+                        <label for="l2">英语</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span>搜索历史记录</span>：是否希望在搜索时展现您的搜索历史</td>
+                    <td style="padding-left: 20px">
+                        <select id="sel">
+                            <option value="0">开启</option>
+                            <option value="1">关闭</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <div id="footer">
+                <button onclick="saveSet()">保存设置</button>
+                <button onclick="restoreSet()">恢复默认</button>
+            </div>
+        </div>
+        <div id="downBody">
+            <div>
+                <table width="100%" border="0" cellpadding="2" cellspacing="0"></table>
+            </div>
+            <button onclick="his = [];localStorage.removeItem('__localHistory__');window.location.reload()">清空记录
+            </button>
+        </div>
+    </div>
+</div>
+<img src="https://www.baidu.com/img/baidu_jgylogo3.gif" alt="模拟百度" id="mnbd">
+<input type="text" id="baidu">
+<span id="camera" onclick="camera()"></span>
+<label for="baidu" id="bdyx" onclick="search()">百度一下</label>
+<ul id="tip"></ul>
+<div id="cam">
+    <div id="preview">
+        <span>拖拽图片到这里</span>
+    </div>
+    <div id="box">
+        <input type="file" id="fileTj" value="图片上传" onchange="preview()">
+        <span id="bd">本地图片上传</span>
+    </div>
+    <div id="x" onclick="cha()">&times;</div>
+</div>
+<iframe width="500px" height="300px" src="" scrolling="auto" frameborder="1"></iframe>
+<div id="progress-box">
+    <div id="progress-bar"></div>
+</div>
+<div id="set">
+    <span>设置</span>
+    <span></span>
+    <ul id="list">
+        <li onclick="setSearch()">搜索设置</li>
+        <li onclick="advancedSearch()">高级搜索</li>
+        <li onclick="forecast()">关闭预测</li>
+        <li onclick="remove()">清空历史</li>
+    </ul>
+</div>
+<div id="login">
+    <span onclick="login()">登录</span>
+    <ul>
+        <li onclick="exit()">退出</li>
+        <li onclick="help()">帮助</li>
+    </ul>
+</div>
+<div class="easyui-dialog" title="登录百度" style="width:400px" id="pan"
+     data-options="closable:true,closed:true,iconCls:'icon-bd'">
+    <div style="padding:20px 60px 20px 60px">
+        <form id="ff" method="post">
+            <table cellpadding="5">
+                <tr>
+                    <td>用户名:</td>
+                    <td><input class="easyui-textbox" type="text" name="name"
+                               data-options="required:true,validType:'length[2, 5]',missingMessage:'请输入2-5位用户名',invalidMessage:'用户名错误'">
+                    </td>
+                </tr>
+                <tr>
+                    <td>密&nbsp;&nbsp;&nbsp;码:</td>
+                    <td><input class="easyui-textbox" type="password" name="password"
+                               data-options="required:true,validType:'length[5, 10]',missingMessage:'请输入5-10位密码',invalidMessage:'密码错误'">
+                    </td>
+                </tr>
+                <tr>
+                    <td>验证码:</td>
+                    <td id="y">
+                        <input id="sr" class="easyui-textbox" type="text" name="yzm"
+                               data-options="required:true,validType:'yzm',missingMessage:'请输入验证码',tipPosition:'left'">
+                        <div id="boxs"></div>
+                    </td>
+                </tr>
+            </table>
+        </form>
+        <div style="padding:5px">
+            <a href="javascript:void(0)" class="easyui-linkbutton" style="margin: 0 60px" onclick="logins()">登录</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" onclick="register()">注册</a>
+        </div>
+    </div>
+</div>
+<script>
+    var globalArr = [], index, text, his = [], number = [], user, password;
+    var tab = {
+        searchBoxPrompt: true,
+        searchLanguageRange: "CN",
+        searchHistoricalRecord: true
+    };
+    var num = [
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
+        'a', 'b', 'c', 'd', 'e', 'f',
+        'g', 'h', 'i', 'j', 'k', 'l',
+        'm', 'n', 'o', 'p', 'q', 'r',
+        's', 't', 'u', 'v', 'w', 'x',
+        'y', 'z', 'A', 'B', 'C', 'D',
+        'E', 'F', 'G', 'H', 'I', 'J',
+        'K', 'L', 'M', 'N', 'O', 'P',
+        'Q', 'R', 'S', 'T', 'U', 'V',
+        'W', 'X', 'Y', 'Z'
+    ];
+
+    load();
+
+    $("#cam").hide();
+    $("#tip").css("border", "none");
+    if ($("#downBody").find("table tr").length === 0) {
+        $("#downBody").find("table").append("<tr><td>暂无搜索记录</td></tr>");
+        $("#downBody>div").css("overflowY", "hidden");
+    }
+    $("#baidu").focus(function () {
+        $(this).css('borderColor', '#3385ff');
+        $('#camera').css({'borderTopColor': '#3385ff', 'borderBottomColor': '#3385ff'})
+    }).blur(function () {
+        $(this).css('borderColor', '#ddd');
+        $('#camera').css({'borderTopColor': '#ddd', 'borderBottomColor': '#ddd'})
+    });
+
+    $("#baidu").keyup(function () {
+        var api = "http://suggestion.baidu.com/su";
+        var obj = {
+            p: "3",
+            cb: "handleResponse",
+            wd: $("#baidu").val()
+        };
+        $.ajax({
+            url: api,
+            type: "POST",
+            data: obj,
+            dataType: "jsonp", //jquery返回数据以jsonp格式
+            jsonp: 'callback', //指定一个查询参数名称来覆盖默认的 jsonp 回调参数名 callback
+            jsonpCallback: "handleResponse",  //回调函数名
+            success: function (result) {
+                if (result) {
+                    $("#tip").empty();
+                    for (var i = 0; i < result.s.length; i++) {
+                        if (globalArr.join("-").indexOf(result.s[i]) === -1) {
+                            $("<li>" + result.s[i] + "</li>").appendTo($("#tip"));
+                        } else {
+                            if (tab.searchHistoricalRecord) {
+                                $("<li id='spe'>" + result.s[i] + "</li>").appendTo($("#tip"));
+                            } else {
+                                $("<li>" + result.s[i] + "</li>").appendTo($("#tip"));
+                            }
+                        }
+                    }
+                    $("<span id='close' onclick='gb()'>关闭</span>").appendTo($("#tip"));
+                    if ($("#tip").has("li").length === 0) {
+                        $("#tip").css("border", "none");
+                        $("#tip>span").remove();
+                    } else {
+                        $("#tip").css("border", "1px solid #ddd");
+                    }
+                    changeColor();
+                }
+            },
+            error: function (msg) {
+                console.log(msg)
+            }
+        });
+    });
+
+    function changeColor() {
+        $("#tip").find("li").hover(function () {
+            if ($(this).attr("id") === "spe") {
+                index = $(this).index();
+                $("<span onclick='del()' id='del'>删除</span>").appendTo($(this));
+            }
+            $(this).css("background", "#ddd").click(function () {
+                $("#tip").empty();
+                if ($("#tip").has("li").length === 0) {
+                    $("#tip").css("border", "none");
+                } else {
+                    $("#tip").css("border", "1px solid #ddd");
+                }
+                if ($(this).attr("id") === "spe") {
+                    $("#baidu").val($(this).text().substring(0, $(this).text().length - 2));
+                } else {
+                    $("#baidu").val($(this).text());
+                }
+            });
+        }, function () {
+            $(this).find("span").remove();
+            $(this).css("background", "none");
+        });
+    }
+
+    function search() {
+        text = $.trim($("#baidu").val());
+        if (text.length !== 0) {
+            if (globalArr.indexOf(text) === -1) {
+                globalArr.push(text);
+                save();
+                var hisObj = {};
+                hisObj.time = timeFormatting();
+                hisObj.content = text;
+                his.push(JSON.stringify(hisObj));
+                localStorage.setItem("__localHistory__", his.join("&"));
+                $("#downBody").find("table").append("<tr><td>" + timeFormatting() + "</td><td>" + text + "</td></tr>");
+                if ($("#downBody").find("table tr").length === 0) {
+                    $("#downBody").find("table").append("<tr><td>暂无搜索记录</td></tr>");
+                    $("#downBody>div").css("overflowY", "hidden");
+                } else {
+                    $("#downBody").find("table tr:nth-child(1)").remove();
+                    $("#downBody>div").css("overflowY", "scroll");
+                }
+                if (text.length > 10) {
+                    progress(5);
+                } else {
+                    progress(1);
+                }
+            } else {
+                var hisObj = {};
+                hisObj.time = timeFormatting();
+                hisObj.content = text;
+                his.push(JSON.stringify(hisObj));
+                localStorage.setItem("__localHistory__", his.join("&"));
+                $("#downBody").find("table").append("<tr><td>" + timeFormatting() + "</td><td>" + text + "</td></tr>");
+                if ($("#downBody").find("table tr").length === 0) {
+                    $("#downBody").find("table").append("<tr><td>暂无搜索记录</td></tr>");
+                    $("#downBody>div").css("overflowY", "hidden");
+                } else {
+                    $("#downBody").find("table tr:nth-child(1)").remove();
+                    $("#downBody>div").css("overflowY", "scroll");
+                }
+                if (text.length > 10) {
+                    progress(5);
+                } else {
+                    progress(1);
+                }
+            }
+        }
+        if ($("#baidu").attr("disabled")) {
+            alert("图片搜索功能完善中...");
+        }
+    }
+
+    function del() {
+        event.stopPropagation();
+        var text = $("#tip").find("li").eq(index).text();
+        var delText = text.substring(0, text.length - 2);
+        $("#tip").find("li").eq(index).remove();
+        for (var i = 0; i < globalArr.length; i++) {
+            if (globalArr[i] === delText) {
+                globalArr.splice(i, 1);
+            }
+        }
+        save();
+    }
+
+    function gb() {
+        event.stopPropagation();
+        $("#tip").empty();
+        $("#tip>span").remove();
+        if ($("#tip").has("li").length === 0) {
+            $("#tip").css("border", "none");
+            $("#tip>span").remove();
+        } else {
+            $("#tip").css("border", "1px solid #ddd");
+        }
+    }
+
+    function save() {
+        localStorage.setItem("__localData__", globalArr.join("QvQ"));
+        localStorage.setItem("__localSettings__", JSON.stringify(tab));
+    }
+
+    function load() {
+        var locData = localStorage.getItem("__localData__");
+        var locSettings = localStorage.getItem("__localSettings__");
+        var localHistory = localStorage.getItem("__localHistory__");
+        var userInfo = sessionStorage.getItem("userInfo");
+        var judge = JSON.parse(locSettings);
+        if (locData !== null) {
+            var old = locData.split("QvQ");
+            globalArr = old;
+        }
+        if (locSettings !== null) {
+            if (judge.searchBoxPrompt) {
+                $("#t1").attr("checked", true);
+                $("#ul_f").replaceWith("<ul id='tip'></ul>");
+                $("#list>li:nth-child(3)").text("关闭预测");
+                tab.searchBoxPrompt = true;
+            } else {
+                $("#t2").attr("checked", true);
+                $("#tip").replaceWith("<ul id='ul_f'></ul>");
+                $("#list>li:nth-child(3)").text("开启预测");
+                tab.searchBoxPrompt = false;
+            }
+
+            if (judge.searchLanguageRange === "CN") {
+                $("#l1").attr("checked", true);
+                tab.searchLanguageRange = "CN";
+            } else {
+                $("#l2").attr("checked", true);
+                tab.searchLanguageRange = "EN";
+            }
+
+            if (judge.searchHistoricalRecord) {
+                $("#sel").val("0");
+                tab.searchHistoricalRecord = true;
+            } else {
+                $("#sel").val("1");
+                tab.searchHistoricalRecord = false;
+            }
+        }
+        if (localHistory !== null) {
+            var strs = localHistory.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                var str =
+                    "<tr>" +
+                    "<td>" + JSON.parse(strs[i]).time + "</td>" +
+                    "<td>" + JSON.parse(strs[i]).content + "</td>" +
+                    "</tr>";
+                his.push(strs[i]);
+                $("#downBody").find("table").append(str);
+            }
+        }
+        if(userInfo !== null){
+            var info = userInfo.split("&");
+            $("#login").find("span").text(info[0]);
+        }
+    }
+
+    function camera() {
+        var len = $.trim($("#baidu").val()).length;
+        if (len > 0) {
+            $("#baidu").val("");
+            $("#bdyx").text("识图一下");
+            $("#cam").show().css({
+                'borderLeftColor': '#317ef3',
+                'borderRightColor': '#317ef3',
+                'borderBottomColor': '#317ef3'
+            });
+            $("#baidu").attr("disabled", true).css({
+                borderTop: '1px solid red',
+                borderBottom: '1px solid red',
+                borderLeft: '1px solid red',
+                borderRight: '0 solid red'
+            });
+            $("#camera").css({
+                borderTop: '1px solid red',
+                borderBottom: '1px solid red'
+            });
+        } else {
+            $("#bdyx").text("识图一下");
+            $("#cam").show().css({
+                'borderLeftColor': '#317ef3',
+                'borderRightColor': '#317ef3',
+                'borderBottomColor': '#317ef3'
+            });
+            $("#baidu").attr("disabled", true).css({
+                borderTop: '1px solid red',
+                borderBottom: '1px solid red',
+                borderLeft: '1px solid red',
+                borderRight: '0 solid red'
+            });
+            $("#camera").css({
+                borderTop: '1px solid red',
+                borderBottom: '1px solid red'
+            });
+        }
+    }
+
+    function cha() {
+        $('#cam').hide();
+        $("#bdyx").text("百度一下");
+        $("#baidu").attr("disabled", false).css({
+            borderTop: '1px solid #ddd',
+            borderBottom: '1px solid #ddd',
+            borderLeft: '1px solid #ddd',
+            borderRight: '0 solid #ddd'
+        });
+        $("#camera").css({
+            borderTop: '1px solid #ddd',
+            borderBottom: '1px solid #ddd'
+        });
+        if ($("#pImg").attr("src") !== "" && $("#pImg").length > 0) {  //判断一个元素是否存在，确定该元素的长度是否大于0
+            $("#pImg").remove();
+            $("#preview").append($("<span>拖拽图片到这里</span>"));
+        }
+    }
+
+    function preview() {
+        var img = ["image/jpg", "image/jpeg", "image/png", "image/bmp", "image/gif"];
+        var imgType = $("#fileTj")[0].files[0].type;
+        if (img.indexOf(imgType) !== -1) {
+            var file = $("#fileTj")[0].files[0];
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = function () {
+                $("#preview>span").remove();
+                $("<img src='' id='pImg'>").appendTo($("#preview"));
+                $("#pImg").attr("src", this.result).css({
+                    width: "240px",
+                    height: "60px"
+                });
+            }
+        } else {
+            alert("请输入jpg,jpeg,png,bmp,gif的格式图片!");
+        }
+    }
+
+    function drafting() {
+        var box = $("#preview")[0];
+        box.addEventListener("dragenter", function (e) {  //拖进
+            e.stopPropagation();
+            e.preventDefault();
+            $("#preview>span").remove();
+        });
+        box.addEventListener("dragover", function (e) {   //拖来拖去
+            e.stopPropagation();
+            e.preventDefault();
+        });
+        box.addEventListener("dragleave", function (e) { //拖离
+            e.stopPropagation();
+            e.preventDefault();
+            $("#preview").append($("<span>拖拽图片到这里</span>"));
+        });
+        box.addEventListener("drop", function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            var img = ["image/jpg", "image/jpeg", "image/png", "image/bmp", "image/gif"];
+            var imgType = e.dataTransfer.files[0].type;
+            console.log(e.dataTransfer.files[0]);
+            if (img.indexOf(imgType) !== -1) {
+                var file = e.dataTransfer.files[0];
+                var reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function () {
+                    $("<img src='' id='pImg'>").appendTo($("#preview"));
+                    $("#pImg").attr("src", this.result).css({
+                        width: "240px",
+                        height: "60px"
+                    });
+                }
+            } else {
+                alert("请输入jpg,jpeg,png,bmp,gif的格式图片!");
+                $("#preview").append($("<span>拖拽图片到这里</span>"));
+            }
+        });
+    }
+
+    drafting();
+
+    function progress(num) {
+        $("#progress-box").css("display", "block");
+        var per = 0;
+        var timer = setInterval(function () {
+            if (per >= 100) {
+                clearInterval(timer);
+                $("#progress-box").css("display", "none");
+                $("iframe").attr("src", "https://www.baidu.com/s?ie=utf-8&f=8&rsv_bp=1&rsv_idx=1&tn=baidu&wd=" + text + "&oq=%25E6%2588%2591%25E4%25B8%258D%25E7%259F%25A5%25E9%2581%2593&rsv_pq=96d59e480000a1fa&rsv_t=53e67G8YhMonvH%2FWQZ3SF1PjY4ySB0EkcRX4A4KtElgA0I4ivbsm3%2F6mJSQ&rqlang=cn&rsv_enter=1&rsv_sug3=5&rsv_sug1=5&rsv_sug7=100");
+            }
+            $("#progress-bar").css("width", (per++) + "%");
+        }, num);
+    }
+
+    $("#set").hover(function () {
+        $("#list").show();
+    }, function () {
+        $("#list").hide();
+    });
+
+    function remove() {
+        globalArr = [];
+        localStorage.removeItem("__localData__");
+    }
+
+    function forecast() {
+        if (tab.searchBoxPrompt) {
+            $("#list>li:nth-child(3)").text("开启预测");
+            $("#tip").replaceWith("<ul id='ul_f'></ul>");
+            tab.searchBoxPrompt = false;
+            save();
+        } else {
+            $("#list>li:nth-child(3)").text("关闭预测");
+            $("#ul_f").replaceWith("<ul id='tip'></ul>");
+            tab.searchBoxPrompt = true;
+            save();
+        }
+        window.location.reload();
+    }
+
+    function advancedSearch() {
+        $("#topDown").slideDown();
+        $("#head>ul li").eq(1).addClass("switch").siblings().removeClass("switch");
+        $("#downBody").css("display", "block").siblings().css("display", "none");
+        tabs();
+    }
+
+    function setSearch() {
+        $("#topDown").slideDown();
+        $("#head>ul li").eq(0).addClass("switch").siblings().removeClass("switch");
+        $("#topBody").css("display", "block").siblings().css("display", "none");
+        tabs();
+    }
+
+    $("#xclose").click(function () {
+        $("#topDown").slideUp();
+    });
+
+    function tabs() {
+        $("#head>ul li").click(function () {
+            var predicable = $(this).attr("name");
+            if (predicable === "a") {
+                $(this).addClass("switch").siblings().removeClass("switch");
+                $("#topBody").css("display", "block").siblings().css("display", "none");
+            } else {
+                $(this).addClass("switch").siblings().removeClass("switch");
+                $("#downBody").css("display", "block").siblings().css("display", "none");
+            }
+        });
+    }
+
+    function saveSet() {
+        if ($("#t1").is(":checked")) {
+            tab.searchBoxPrompt = true;
+            $("#ul_f").replaceWith("<ul id='tip'></ul>");
+            $("#list>li:nth-child(3)").text("关闭预测");
+        } else if ($("#t2").is(":checked")) {
+            tab.searchBoxPrompt = false;
+            $("#tip").replaceWith("<ul id='ul_f'></ul>");
+            $("#list>li:nth-child(3)").text("开启预测");
+        }
+
+        if ($("#l1").is(":checked")) {
+            tab.searchLanguageRange = "CN";
+        } else if ($("#l2").is(":checked")) {
+            tab.searchLanguageRange = "EN";
+        }
+
+        if ($("#sel").val() === "0") {
+            tab.searchHistoricalRecord = true;
+        } else {
+            tab.searchHistoricalRecord = false;
+        }
+        save();
+        window.location.reload();
+    }
+
+    function restoreSet() {
+        tab.searchBoxPrompt = true;
+        tab.searchLanguageRange = "CN";
+        tab.searchHistoricalRecord = true;
+        $("#t1").attr("checked", true);
+        $("#l1").attr("checked", true);
+        $("#sel").val("0");
+        save();
+        window.location.reload();
+    }
+
+    function timeFormatting() {
+        var time = new Date();
+        var Y = time.getFullYear();
+        var M = time.getMonth() + 1;
+        var D = time.getDate();
+        var h = time.getHours();
+        var m = time.getMinutes();
+        var s = time.getSeconds();
+        return Y + "-" + (M < 10 ? "0" + M : M) + "-" + (D < 10 ? "0" + D : D) + " " + (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+    }
+
+    function login() {
+        if($("#login>span").text() === "登录"){
+            $("#pan").dialog({
+                closed: false,
+                modal: true
+            });
+        }
+    }
+
+    $(function () {
+        $("#pan").dialog("center");
+    });
+
+    $(window).resize(function () {
+        $("#pan").dialog("center");
+    });
+
+    function make() {
+        number = [];
+        var color = ["lightblue", "lightcoral", "lightsalmon", "lightgreen", "lightgray"];
+        var chooseColor = color[parseInt(Math.random() * 5)];
+        for (var i = 0; i < 4; i++) {
+            var a = Math.round(Math.random() * 61);
+            var b = num[a];
+            number.push(b);
+        }
+        $("#boxs").html("<div id='yzm' onclick='make()' style='background:" + chooseColor + "'>" + number.join("") + "</div>")
+            .append("<span id='toolTip'>看不清，换一张</span>");
+    }
+
+    make();
+
+    $("#boxs").hover(function () {
+        $("#toolTip").show();
+    }, function () {
+        $("#toolTip").hide();
+    });
+
+    $.extend($.fn.validatebox.defaults.rules, {
+        yzm: {
+            validator: function (value) {
+                return $.trim(value) === number.join("");
+            },
+            message: '验证码不正确'
+        }
+    });
+
+    function register() {
+        $.messager.alert('提示', "注册功能完善中...");
+    }
+
+    function logins() {
+        $('#ff').form('submit', {
+            onSubmit: function () {
+                var isValid = $(this).form('validate');
+                if (isValid) {
+                    $("#pan").dialog({
+                        closed: true,
+                        modal: false
+                    });
+                    user = $("input[name='name']").val();
+                    password = $("input[name='password']").val();
+                    $("#login").find("span").text(user);
+                    $("#login").hover(function (){
+                        $("#login").find("ul").show();
+                    }, function () {
+                        $("#login").find("ul").hide();
+                    });
+                    sessionStorage.setItem("userInfo", user + "&" +password);
+                }
+            }
+        })
+    }
+
+    $("#login").hover(function () {
+        if($("#login>span").text() !== "登录"){
+            $("#login").find("ul").show();
+        }
+    }, function (){
+        $("#login").find("ul").hide();
+    });
+
+    function exit(){
+        sessionStorage.removeItem("userInfo");
+        window.location.reload();
+    }
+
+    function help(){
+        alert("帮助功能完善中...");
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #img {
+            width: 200px;
+            height: 200px;
+            margin: 15px 80px;
+        }
+    </style>
+</head>
+<body>
+<textarea id="ewm" rows="15" cols="50" style="resize: none;outline: none;float: left" placeholder="请输入转化的内容"></textarea>
+<div style="border: 1px solid lightblue;width: 373px;height: 231px;float: left;margin-left: 30px">
+    <img>
+</div>
+<select style="position: absolute;top: 250px;left: 8px;width: 373px;height: 30px;outline: none;cursor: pointer" onchange="choose()">
+    <option value="000000">选择颜色</option>
+    <option value="FF0000">红色</option>
+    <option value="00FF00">绿色</option>
+    <option value="0000FF">蓝色</option>
+    <option value="">其它颜色</option>
+</select>
+<button style="position: absolute;top: 250px;left: 410px;width: 373px;height: 30px;cursor: pointer" onclick="produce()">生成二维码</button>
+<script>
+    var y = false;
+    document.querySelector("#ewm").focus();
+    var str = "http://qr.liantu.com/api.php?text=";
+
+    //二维码生成函数
+    function produce(){
+        var text;
+        if(y === false){
+            console.log(document.querySelector("select").value);
+            text = str + document.querySelector("#ewm").value.toString() + "&fg=" + document.querySelector("select").value;
+            document.querySelector("img").setAttribute("src", text);
+            document.querySelector("img").setAttribute("id", "img");
+        }else {
+            text = str + document.querySelector("#ewm").value.toString() + "&fg=" + document.querySelector("select").options[4].value;
+            document.querySelector("img").setAttribute("src", text);
+            document.querySelector("img").setAttribute("id", "img");
+            y = false;
+        }
+    }
+
+    //enter键触发
+    document.onkeydown = function (){
+        if(window.event.keyCode === 13||32){
+            produce();
+        }
+    };
+
+    //自定义颜色函数
+    function choose(){
+        var selectIndex = document.querySelector("select").selectedIndex;
+        if(selectIndex === 4){
+            var x = prompt("请输入16进制颜色值");
+            if(x !==null && x.length === 7 && x[0] === "#"){
+                document.querySelector("select").options[4].value = x.substr(1, x.length);
+                y = true;
+                produce();
+            }else{
+                alert("颜色值输出错误，请重新输入!");
+            }
+        }
+    }
+</script>
+</body>
+</html>
